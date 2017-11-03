@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Proyecto de Ciencias</title>
+	<!-- CSS -->
+	<link rel="stylesheet" type="text/css" href="css/css_index.css">
+	<link rel="stylesheet" type="text/css" href="plugin/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" type="text/css" href="plugin/semantic/semantic.min.css">
+	<link rel="stylesheet" type="text/css" href="plugin/noUiSlider/nouislider.min.css">
+	<!-- JAVASCRIPT -->
+	<script type="text/javascript" src="js/jquery-1.12.3.min.js"></script>
+	<script type="text/javascript" src="js/codeSimuladorPila.js"></script>
+	<script type="text/javascript" src="js/addChild.js"></script>
+	<script type="text/javascript" src="js/isLetter.js"></script>
+	<script type="text/javascript" src="plugin/codemirror/lib/codemirror.js"></script>
+	<script type="text/javascript" src="plugin/semantic/semantic.js" ></script>
+	<script type="text/javascript" src="plugin/noUiSlider/nouislider.min.js"></script>
+	
+</head>
+<body>
+
+<br>
+<br>
+
+<div><center>Aqui va el titulo de la pagina</center></div>
+<br>
+<br>
+<br>
+<div class="ui center aligned grey segment">
+    <h2 class="ui header" id="machine_title">[name_of_machine]</h2>
+</div>
+<center>
+	<div class="cuerpocentral">
+	    <div class="logo" >
+	        <center>A</center>
+	    </div>
+	    <div class="logo" >
+	        <center>B</center>
+	    </div>
+	    <div class="logo" >
+	       <center>C</center>
+	    </div>
+	    <div class="logo" >
+	    	<center>D</center>
+	    </div>
+	    <div class="logo" >
+	    	
+	    	<center>F</center>
+	    	
+			</div>
+	</div>
+	<div class="ui raised segment" style="width: 50%; background: #ffffff; border-color: #ffffff ;">
+			<button class="ui compact icon button">
+				<i class="pause icon"></i>
+		</button>
+		<button class="ui compact icon button">
+				<i class="play icon"></i>
+		</button>
+		<button class="ui compact icon button">
+				<i class="stop icon"></i>
+		</button>
+	</div>
+	<div class="ui raised segment" style="width: 50%">
+		<div class="six wide center aligned column" id="speed_column">
+    		<div class="ui grid">
+		      	<div class="four wide column">
+		        	<h3 class="ui header">Speed:</h3>
+		      	</div>
+		      	<div class="eleven wide center aligned column">
+		        	<div id="speed_bar"></div>
+		      	</div>
+    		</div>
+  		</div>
+	</div>
+			
+</center>
+<br>
+<br>
+<br>
+<div class="ui raised segment" style="width: 50%; background: #ffffff; border-color: #ffffff ;">
+	<input type="text" placeholder="Ingrese palabra a comprobar"> <input type="button" name="Input" value="Cargar">
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+	<textarea id="code-editor"></textarea>
+	<br>
+	<center><button id="loader" class="ui bottom attached blue fluid button" onclick="comprobarSintaxis();">Compile</button></center>
+	<div id="estado"></div>
+	<div id="error"></div>
+</div>
+
+<div class="ui raised segment" style="width: 50%; background: #ffffff; border-color: #ffffff ; display: inline-block; ">
+<center>Aqui va la pila</center>
+</div>
+</body>
+</html>
