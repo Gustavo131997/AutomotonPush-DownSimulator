@@ -1,37 +1,46 @@
 
 
 var estados= [];
-var alfabeto = ["N","I","F","P","\n"," ",",",":","/","*"];
-var desempilar = "_";
+var alfabeto = ["N","I","F","P","T","\n"," ",",",":","/","_","#","*"];
 
 var funcionDelta =[
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  N	*/		[3 ,44, 2,44, 5, 5,44,44,44, 9,44,12,12,44,44,44,16,44,19,19,44,44,44,23,44,26,44,30,44,29,30,44,33,44,37,44,36,37,44,40,44,42,42,44,44],//0
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  I   */		[44,44, 2,44, 5, 5,44,10,44, 9,44,12,12,44,44,44,16,44,19,19,44,44,44,23,44,26,44,30,44,29,30,44,33,44,37,44,36,37,44,40,44,42,42,44,44],//1
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  F 	*/		[44,44, 2,44, 5, 5,44,44,44, 9,44,12,12,44,17,44,16,44,19,19,44,44,44,23,44,26,44,30,44,29,30,44,33,44,37,44,36,37,44,40,44,42,42,44,44],//2
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  P 	*/		[44,44, 2,44, 5, 5,44,44,44, 9,44,12,12,44,44,44,16,44,19,19,44,24,44,23,44,26,44,30,44,29,30,44,33,44,37,44,36,37,44,40,44,42,42,44,44],//3
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/* \n 	*/		[0 ,44, 0,44,44, 7, 7, 7,44, 7,44,44,14,14,14,44,14,44,44,21,21,21,44,21,44,44,27,27,44,27,44,44,44,34,34,44,34,44,44,44,44,44,27,27,44],//4
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*[Space]*/		[0 ,44, 2, 3, 4, 6, 6, 7,44, 9,10,11,13,13,14,44,16,17,18,20,20,21,44,23,24,25,26,27,44,29,31,31,32,33,34,44,36,38,38,44,40,41,43,43,44],//5
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  , 	*/		[44,44, 2,44,44,44,44,44,44, 9,44,44,44,44,44,44,16,44,44,18,18,44,44,23,44,44,25,44,44,29,32,32,44,44,44,44,36,39,39,44,41,44,44,44,44],//6
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  : 	*/		[44,44, 2, 4,44,44,44,44,44, 9,11,44,44,44,44,44,16,18,44,44,44,44,44,23,25,44,44,44,44,29,44,44,44,44,44,44,36,44,44,44,44,44,44,44,44],//7
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/*  /	*/		[1 , 2, 2,44,44, 8, 8, 8, 9, 9,44,44,15,15,15,16,16,44,44,44,22,22,23,23,44,44,28,28,29,29,44,44,44,35,35,36,36,44,44,44,44,44,44,44,44],//8
-				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44*/
-	/* [*]	*/		[44,44, 2,44, 5, 5,44,44,44, 9,44,12,12,44,44,44,16,44,19,19,44,44,44,23,44,26,44,30,44,29,30,44,33,44,37,44,36,37,44,40,44,42,42,44,44] //9
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  N	*/		[3 ,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,26,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//0
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  I   */		[50,50, 2,50, 5, 5,50,10,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,26,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//1
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  F 	*/		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,17,50,16,50,19,19,50,50,50,23,50,26,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//2
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  P 	*/		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,24,50,23,50,26,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//3
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  T    */		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,26,50,30,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//4
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/* \n 	*/		[0 ,50, 0,50,50, 7, 7, 7,50, 7,50,50,14,14,14,50,14,50,50,21,21,21,50,21,50,50,27,27,50,27,50,50,35,50,35,35,50,50,50,40,40,50,40,50,50,46,50,50,35,35,50],//5
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*[Space]*/		[0 ,50, 2, 3, 4, 6, 6, 7,50, 9,10,11,13,13,14,50,16,17,18,20,20,21,50,23,24,25,26,27,50,29,30,31,32,50,34,35,37,37,38,39,40,50,42,44,44,45,46,47,49,49,50],//6
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  , 	*/		[50,50, 2,50,50,50,50,50,50, 9,50,50,50,50,50,50,16,50,50,18,18,50,50,23,50,50,25,50,50,29,50,50,50,50,34,50,38,38,50,50,50,50,42,45,45,50,47,50,50,50,50],//7
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  : 	*/		[50,50, 2, 4,50,50,50,50,50, 9,11,50,50,50,50,50,16,18,50,50,50,50,50,23,25,50,50,50,50,29,31,50,50,50,34,50,50,50,50,50,50,50,42,50,50,50,50,50,50,50,50],//8
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/*  /	*/		[1 , 2, 2,50,50, 8, 8, 8, 9, 9,50,50,15,15,15,16,16,50,50,22,22,22,23,23,50,50,28,28,29,29,50,50,33,34,34,33,50,50,50,41,41,42,42,50,50,50,50,50,33,33,50],//9
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/* _	*/		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,50,50,50,50,29,50,50,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//10
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/* #	*/		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,50,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50],//11
+				   /*0 , 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50*/
+	/* [*]	*/		[50,50, 2,50, 5, 5,50,50,50, 9,50,12,12,50,50,50,16,50,19,19,50,50,50,23,50,26,50,50,50,29,50,32,50,50,34,36,36,50,39,50,43,50,42,43,50,46,50,48,48,50,50]//12
 	];
 var editorCode;
 var estadoActual = 0;
 var lineaCodigo;
+var letra;
+var letraNueva ;
+var contLineas;
 // variable de automata con pila
 var nameAutomata = "";
 var estadoInicial = "";
+var topeInicialPila = "";
 var estadosFinales = [];
 var funcionDeltaPila = [];
 var estadosAutomata = [];
@@ -76,39 +85,48 @@ function get_indice(letra) {
     
     var k = alfabeto.indexOf(letra);
     if(k == -1 && isLetter(letra)){
-    	k= 9;
+    	k= 12;
     }
-    console.log(k);
     return k;
 }
-var letra;
-var letraNueva ;
+var j;
 
 //entrega true o false si la sintaxis esta correcta
 function compilarSintaxis() {
+	
+	estadoActual = 0;
+	alfabetoAutomata = [];
+	numeroTransiciones = 0;
+	topePilas = [];
+	apilamiento = [];
+	alfabetoPila = [];
+	estadosAutomata = [];
+	estadosInicialesTransicion = [];
+	estadosFinalesTransicion = [];
+	estadoInicial = "";
+	estadosFinales = [];
+	funcionDeltaPila = [];
 	var incorrect = false;
 	 lineaCodigo = editorCode.getValue();
-	 var contLineas = 1;
-	 var contTransiciones = 0;
+	 contLineas = 1;
 	 var nuevoEstado = -1;
 		estadoActual = 0;
 		var i = 0;
 		if (lineaCodigo != '' ) {
 			var str = "";
-			for (var j =  0; j < lineaCodigo.length ; j++) {
+			for (j =  0; j < lineaCodigo.length ; j++) {
 					letraNueva = lineaCodigo.charAt(j);
-					if(letraNueva =='\n'){
+					var h = get_indice(letraNueva);
+					if( h == 5){
 
 						contLineas++;
 					}
-					var h = get_indice(letraNueva);
 					if (h !== -1) {
 						nuevoEstado = funcionDelta[h][estadoActual];
 					}
-					console.log(estadoActual+" "+nuevoEstado);
 					//Guardar nombre de automata 
 					if (nuevoEstado == 5 && estadoActual == 4) {
-						console.log(true);
+						//console.log(true);
 						str = letraNueva;
 					}
 					if (nuevoEstado == 5 && estadoActual ==5 && h != 5) {
@@ -121,7 +139,7 @@ function compilarSintaxis() {
 					if (nuevoEstado == 12 && estadoActual == 11) {
 						str = letraNueva;
 					}
-					if (nuevoEstado == 12 && estadoActual == 12 && h != 5) {
+					if (nuevoEstado == 12 && estadoActual == 12 && h != 5 ) {
 						str += letraNueva;
 					}
 					if (estadoActual == 12 && nuevoEstado != 12) {
@@ -143,57 +161,62 @@ function compilarSintaxis() {
 					}
 					//guardar alfabeto Pila
 					if (estadoActual == 25 && nuevoEstado == 26) {
-						if (!esta_Definido(letraNueva)) {
-							alfabetoPila.push(letraNueva);
-						}
-						
+						alfabetoPila.push(letraNueva);
 					}
+					//guardar tope inicial de pila
+					if (estadoActual == 31 && nuevoEstado == 32) {
+						topeInicialPila = letraNueva;
+					}
+
+
 					//guardar estados de automata con pila
-					if (estadoActual == 27 && nuevoEstado == 30) {
+					if (estadoActual == 35 && nuevoEstado == 36) {
 						numeroTransiciones++;
 						str = letraNueva;
 					}
-					if (estadoActual == 30 && nuevoEstado == 30 && h != 5) {
+					if (estadoActual == 36 && nuevoEstado == 36 && h != 5) {
 						str += letraNueva;
 					}
-					if (estadoActual == 30 && (nuevoEstado == 31 || nuevoEstado == 32)) {
+					if (estadoActual == 36 && (nuevoEstado == 37 || nuevoEstado == 38)) {
 						estadosInicialesTransicion.push(str);
 						if (isNotExitsEstadoAutomata(str)) {
 							estadosAutomata.push(str);
 						}
 					}
-					//guardar alfabeto pila
-					if (estadoActual == 32 && nuevoEstado == 33) {
+					//guardar alfabeto Automata
+					if (estadoActual == 38 && nuevoEstado == 39) {
 						alfabetoAutomata.push(letraNueva);
 					}
 					//guardar estados de automata con pila 2
-					if (estadoActual == 34 && nuevoEstado == 37) {
+					if (estadoActual == 40 && nuevoEstado == 43) {
 						str = letraNueva;
 					}
-					if (estadoActual == 37 && nuevoEstado == 37 && h != 5) {
+					if (estadoActual == 43 && nuevoEstado == 43 && h != 5) {
 						str += letraNueva;
 					}
-					if (estadoActual == 37 && (nuevoEstado == 38 || nuevoEstado == 39)) {
+					if (estadoActual == 43 && (nuevoEstado == 44 || nuevoEstado == 45)) {
 						estadosFinalesTransicion.push(str);
 						if (isNotExitsEstadoAutomata(str)) {
 							estadosAutomata.push(str);
 						}
 					}
-					if (estadoActual == 39 && nuevoEstado == 40) {
+
+					if (estadoActual == 45 && nuevoEstado == 46) {
 						if (esta_Definido(letraNueva)) {
 							topePilas.push(letraNueva);
 						}else{
 							console.log('No esta definido');
 						}
 					}
-					if (estadoActual == 41 && nuevoEstado == 42) {
+
+					if (estadoActual == 47 && nuevoEstado == 48) {
 						if (esta_Definido(letraNueva)) {
 							str = letraNueva
 						}else{
 							console.log('No esta definido');
 						}
 					}
-					if (estadoActual == 42 && nuevoEstado == 42) {
+					if (estadoActual == 48 && nuevoEstado == 48) {
 						if (esta_Definido(letraNueva)) {
 							str += letraNueva;
 						}else{
@@ -201,7 +224,9 @@ function compilarSintaxis() {
 						}
 					}
 					
-					if ((isLetter(letra) || isLetter(letraNueva)) && estadoActual == 42 && ((nuevoEstado == 42 && j == lineaCodigo.length-1) || nuevoEstado == 27 || nuevoEstado == 43)) {
+					if ((isLetter(letra) || isLetter(letraNueva)) && estadoActual == 48 && (nuevoEstado == 33 || nuevoEstado == 35 || nuevoEstado == 49)) {
+						apilamiento.push(str);
+					}else if ((isLetter(letra) || isLetter(letraNueva)) && estadoActual == 47 && nuevoEstado ==  48 && j == lineaCodigo.length -1) {
 						apilamiento.push(str);
 					}
 					
@@ -212,7 +237,7 @@ function compilarSintaxis() {
 			}
 		}
 	
-		if (estadoActual == 42 || estadoActual == 43) {
+		if (estadoActual == 48 || estadoActual == 49) {
 			return incorrect;
 		}else{
 			incorrect = true;
@@ -245,12 +270,12 @@ function comprobarSintaxis(){
 			
 		}else{
 			document.getElementById('error').innerHTML = "Error la compilacion";
-			alfabetoPila = [];
 		}
 	
 }
 
 function transiciones() {
+	/**
 	estadoInicial
 	estadosFinales
 	estadosAutomata
@@ -261,9 +286,25 @@ function transiciones() {
 	topePilas
 	apilamiento
 	funcionDeltaPila = [[,],[],[],[]];
+	**/
+	var pila = [];
+	var cadena2 = document.getElementById('cadena');
+	var string = cadena2.value;
+	for (var i = 0 ; i < string.length; i++) {
+		var h = esta_alfabetoAutomata(string.charAt(i));
+		if (h !== -1) {
+			
+		}else{
+			break;
+		}
+	}
 
 
 }
 function get_indiceEstado(estado) {
 	return estadosAutomata.indexOf(estado);
+}
+function esta_alfabetoAutomata(letra){
+	var k = alfabetoAutomata.indexOf(letra);
+	return k;
 }
