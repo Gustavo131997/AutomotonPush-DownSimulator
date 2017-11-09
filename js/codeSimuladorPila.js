@@ -33,10 +33,15 @@ var funcionDelta =[
 	];
 var editorCode;
 var estadoActual = 0;
+var nuevoEstado =-1;
 var lineaCodigo;
 var letra;
 var letraNueva ;
 var contLineas;
+var j;
+var isUseEstIncial = false;
+var hashTransiciones = new Map();
+var transicionesVar2 = [];
 // variable de automata con pila
 var nameAutomata = "";
 var estadoInicial = "";
@@ -89,12 +94,11 @@ function get_indice(letra) {
     }
     return k;
 }
-var j;
 
 //entrega true o false si la sintaxis esta correcta
 function compilarSintaxis() {
-	
-	estadoActual = 0;
+	var letra;
+	var estadoActual = 0;
 	alfabetoAutomata = [];
 	numeroTransiciones = 0;
 	topePilas = [];
@@ -112,10 +116,13 @@ function compilarSintaxis() {
 	 var nuevoEstado = -1;
 		estadoActual = 0;
 		var i = 0;
+		var cont = 0;
 		if (lineaCodigo != '' ) {
 			var str = "";
+			var transicion = "";
 			for (j =  0; j < lineaCodigo.length ; j++) {
-					letraNueva = lineaCodigo.charAt(j);
+				
+					var letraNueva = lineaCodigo.charAt(j);
 					var h = get_indice(letraNueva);
 					if( h == 5){
 
@@ -171,13 +178,18 @@ function compilarSintaxis() {
 
 					//guardar estados de automata con pila
 					if (estadoActual == 35 && nuevoEstado == 36) {
-						numeroTransiciones++;
+						
+						transicion = "";
 						str = letraNueva;
 					}
 					if (estadoActual == 36 && nuevoEstado == 36 && h != 5) {
 						str += letraNueva;
 					}
 					if (estadoActual == 36 && (nuevoEstado == 37 || nuevoEstado == 38)) {
+						if (str == estadoInicial) {
+							isUseEstIncial = true;
+						}
+						transicion += str+",";
 						estadosInicialesTransicion.push(str);
 						if (isNotExitsEstadoAutomata(str)) {
 							estadosAutomata.push(str);
@@ -185,6 +197,7 @@ function compilarSintaxis() {
 					}
 					//guardar alfabeto Automata
 					if (estadoActual == 38 && nuevoEstado == 39) {
+						transicion += letraNueva+","
 						alfabetoAutomata.push(letraNueva);
 					}
 					//guardar estados de automata con pila 2
@@ -195,6 +208,7 @@ function compilarSintaxis() {
 						str += letraNueva;
 					}
 					if (estadoActual == 43 && (nuevoEstado == 44 || nuevoEstado == 45)) {
+						transicion += str+",";
 						estadosFinalesTransicion.push(str);
 						if (isNotExitsEstadoAutomata(str)) {
 							estadosAutomata.push(str);
@@ -202,7 +216,8 @@ function compilarSintaxis() {
 					}
 
 					if (estadoActual == 45 && nuevoEstado == 46) {
-						if (esta_Definido(letraNueva)) {
+						transicion += letraNueva+",";
+						if (esta_Definido(letraNueva)){
 							topePilas.push(letraNueva);
 						}else{
 							console.log('No esta definido');
@@ -225,9 +240,15 @@ function compilarSintaxis() {
 					}
 					
 					if ((isLetter(letra) || isLetter(letraNueva)) && estadoActual == 48 && (nuevoEstado == 33 || nuevoEstado == 35 || nuevoEstado == 49)) {
+						transicion += str;
 						apilamiento.push(str);
-					}else if ((isLetter(letra) || isLetter(letraNueva)) && estadoActual == 47 && nuevoEstado ==  48 && j == lineaCodigo.length -1) {
+						hashTransiciones.set(numeroTransiciones,transicion);
+						numeroTransiciones++;
+					}else if ((isLetter(letra) || isLetter(letraNueva)) && (estadoActual == 47 || estadoActual == 48) && nuevoEstado ==  48 && j == lineaCodigo.length-1) {
+						transicion += str;
 						apilamiento.push(str);
+						hashTransiciones.set(numeroTransiciones,transicion);
+						numeroTransiciones++;
 					}
 					
 					
@@ -236,8 +257,8 @@ function compilarSintaxis() {
 					letra = letraNueva;
 			}
 		}
-	
-		if (estadoActual == 48 || estadoActual == 49) {
+	 
+		if (estadoActual == 48 || estadoActual == 49 || estadoActual == 34 || estadoActual == 33 || estadoActual == 35) {
 			return incorrect;
 		}else{
 			incorrect = true;
@@ -265,6 +286,7 @@ function comprobarSintaxis(){
 		alfabetoPila = [];
 		estadoActual = 0;
 		if (!compilarSintaxis()) {
+			transformar();
 			document.getElementById('estado').innerHTML = "Todo esta bien";
 			document.getElementById('error').innerHTML = "";
 			
@@ -274,7 +296,7 @@ function comprobarSintaxis(){
 	
 }
 
-function transiciones() {
+function transformar() {
 	/**
 	estadoInicial
 	estadosFinales
@@ -287,24 +309,103 @@ function transiciones() {
 	apilamiento
 	funcionDeltaPila = [[,],[],[],[]];
 	**/
-	var pila = [];
+	funcionDeltaPila = Array3D(alfabetoAutomata.length,alfabetoPila.length,estadosAutomata.length);
+	funcionDeltaEstados = Array3D(alfabetoAutomata.length,alfabetoPila.length,estadosAutomata.length);
+	for (var i = 0; i < hashTransiciones.size  ; i++) {
+		transicionesVar2.push(hashTransiciones.get(i).split(","));
+	}
+
+	for (var i = 0; i < numeroTransiciones; i++) {
+		funcionDeltaEstados[posAlfabetoAutomata(transicionesVar2[i][1])][posAlfabetoPila(transicionesVar2[i][3])][posEstadoAutomata(transicionesVar2[i][0])] = posEstadoAutomata(transicionesVar2[i][2]); 
+		funcionDeltaPila[posAlfabetoAutomata(transicionesVar2[i][1])][posAlfabetoPila(transicionesVar2[i][3])][posEstadoAutomata(transicionesVar2[i][0])] = transicionesVar2[i][4];
+
+	}
+	/**
+	
+
+*/
+}
+function probar() {
+	if (transicion()) {
+		var p = document.getElementById('correct');
+		p.innerHTML = 'Ok ';
+	}else{
+		var p = document.getElementById('correct');
+		p.innerHTML = 'No';
+	}
+}
+function transicion() {
+	var estadoActualAut = posEstadoAutomata(estadoInicial);
+	var pila = [topeInicialPila];
 	var cadena2 = document.getElementById('cadena');
 	var string = cadena2.value;
 	for (var i = 0 ; i < string.length; i++) {
-		var h = esta_alfabetoAutomata(string.charAt(i));
+		var letra = string.charAt(i);
+		var h =  posAlfabetoAutomata(letra);
 		if (h !== -1) {
-			
+			if (typeof estadoActualAut != 'empty' && typeof estadoActualAut != 'undefined' && estadoActualAut != -1) {
+				var p = funcionDeltaPila[h][posAlfabetoPila(pila[pila.length-1])][estadoActualAut];
+				estadoActualAut = funcionDeltaEstados[h][posAlfabetoPila(pila[pila.length-1])][estadoActualAut];
+				
+				var arr = p.split('');
+				if (pila.length >= 0  && p !="_" ) {
+					if (p.split('').length > 1 && pila[pila.length-1] != arr[0]) {
+						for (var i = 0; i < arr.length; i++) {
+							pila.push(arr[i]);
+						}
+					}else if (arr.length > 1 && pila[pila.length-1] == arr[0]) {
+						for (var i = 1; i < arr.length; i++) {
+							pila.push(arr[i]);
+						}
+					}else if (arr.length == 1 && pila[pila.length-1] != arr[0]) {
+						pila.push(arr[0]);
+					}
+					
+				}else if (pila.length == 0 && p == "_") {
+					console.log("Error!!");
+				}
+			}else{
+				console.log('No hay transicion con ese estado');
+				break;
+			}
 		}else{
+			console.log('Este simbolo'+letra+' no es parte del alfabeto del automata declarado en las transiciones');
 			break;
 		}
 	}
-
-
+	for (var i = 0; i < estadosFinales.length; i++) {
+		if (estadoActualAut == posEstadoAutomata(estadosFinales[i])) {
+			return true;
+		}
+	}
+	return false;
 }
-function get_indiceEstado(estado) {
+
+
+function Array3D(x, y,z)
+{
+    var array3D = new Array(x);
+
+    for(var i = 0; i < array3D.length; i++)
+    {
+        array3D[i] = new Array(y);
+        for (var j = 0; j< array3D[i].length; j++) {
+        	array3D[i][j] = new Array(z);
+        }
+    }
+
+    return array3D;
+}
+
+function posAlfabetoAutomata(letra) {
+	return alfabetoAutomata.indexOf(letra);
+}
+function posAlfabetoPila(letra) {
+	return alfabetoPila.indexOf(letra);
+}
+function estadoAutomata(pos) {
+	return estadosAutomata[pos];
+}
+function posEstadoAutomata(estado) {
 	return estadosAutomata.indexOf(estado);
-}
-function esta_alfabetoAutomata(letra){
-	var k = alfabetoAutomata.indexOf(letra);
-	return k;
 }
